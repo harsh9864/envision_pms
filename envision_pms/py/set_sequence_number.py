@@ -27,6 +27,8 @@ def set_sequence_number_to_tasks(current_task, project):
             project_task_list,
         )
 
+        # task.reload()
+
         sorted(project_task_list, key=lambda x: x["custom_task_sequence_number"])
         # print("Current task sequence number", current_task["custom_task_sequence_number"])
 
@@ -98,19 +100,20 @@ def update_task_sequence(project_task_list, template_task_list):
         for task_data in project_task_list:
             # Fetch the Task document using get_doc
             task = frappe.get_doc("Task", task_data["name"])
-            print(task.name)
+            # print(task.name)
 
             # Set the custom_task_sequence_number using the value from project_task_list
             task.custom_task_sequence_number = task_data["custom_task_sequence_number"]
             task.save()
             print("custom_task_sequence_number : ", task.custom_task_sequence_number)
+            # task.reload()
 
         # Commit all changes after the loop completes
         frappe.db.commit()
 
         # update the estimated time in days
-        update_estimated_time_in_days(template_task_list, project_task_list)
-        print("project_task_list", project_task_list)
+        # update_estimated_time_in_days(template_task_list, project_task_list)
+        # print("project_task_list", project_task_list)
 
     except Exception as e:
         frappe.throw(f"An error occurred while updating task sequence: {str(e)}")

@@ -31,9 +31,11 @@ function convert_days_into_hours(days) {
   if (per_day_hour === null) {
     // Return a default value or an error if per_day_hour is not yet fetched
     console.error("Per Day Hour not available. Fetching now...");
-    return days * 8; // Default fallback to 8 if per_day_hour is not yet available
+
+    // Default 8 hr,if per_day_hour is not available
+    return days * 8;
   }
-  console.log("per_day_hour", per_day_hour);
+  // console.log("per_day_hour", per_day_hour);
   return days * per_day_hour; // Use fetched per_day_hour value
 }
 
@@ -52,7 +54,7 @@ frappe.ui.form.on("Task", {
 
         // Use per_day_hour in conversion
         let hours = convert_days_into_hours(days);
-        console.log("Hours", hours);
+        // console.log("Hours", hours);
 
         frm.set_value("expected_time", Math.round(hours));
       } catch (error) {
@@ -61,51 +63,73 @@ frappe.ui.form.on("Task", {
     });
   },
 
-  exp_start_date: function (frm) {
+  onload_post_render: function (frm) {
+    console.log("onload_post_render event call");
+
     if (frm.doc.custom_task_sequence_number === 0) {
-      frappe.call({
-        method:
-          "envision_pms.py.set_sequence_number.set_sequence_number_to_tasks",
-        args: {
-          current_task: frm.doc.name,
-          project: frm.doc.project,
-          // exp_start_date: frm.doc.exp_start_date,
-        },
-        callback: function (r) {
-          if (!r.exc) {
-            console.log(
-              "Sequene number set ",
-              frm.doc.custom_task_sequence_number
-            );
-          }
-        },
-      }); // End frappe call
+      console.log("Frappe called in side if ");
+      if (frm.doc.template_task) {
+        console.log("Frappe called ");
+
+        frappe.call({
+          method:
+            "envision_pms.py.set_sequence_number.set_sequence_number_to_tasks",
+          args: {
+            current_task: frm.doc.name,
+            project: frm.doc.project,
+
+            // exp_start_date: frm.doc.exp_start_date,
+          },
+          callback: function (r) {
+            if (!r.exc) {
+              frm.refresh();
+              console.log(
+                " IF Sequene number set ",
+                frm.doc.custom_task_sequence_number
+              );
+
+              // frappe.msgprint("Sequene number set");
+            } // End of callback if condition
+          }, // End of callback function
+        }); // End frappe call
+      }
     } // end if condition for sequence number !==0
     else {
       console.log(
-        "Sequene number already set ",
+        " Else Sequene number already set ",
         frm.doc.custom_task_sequence_number
       );
     }
-     console.log(
-       "Sequence number ",
-       typeof frm.doc.custom_task_sequence_number
-     );
-    frappe.call({
-      method:
-        "envision_pms.py.calculate_exp_start_and_end_dates.calculate_exp_start_and_exp_end_date",
-      args: {
-        // current_task: frm.doc.name,
-        project: frm.doc.project,
-        sequence_number: frm.doc.custom_task_sequence_number,
-        exp_start_date: frm.doc.exp_start_date,
-        // exp_start_date: frm.doc.exp_start_date,
-      },
-      callback: function (r) {
-        if (!r.exc) {
-          console.log("date updated ");
-        }
-      },
-    });
+
+    frm.refresh();
+    console.log("Sequence number ", frm.doc.custom_task_sequence_number);
+  },
+
+  exp_start_date: function (frm) {
+    if (frm.doc.template_task) {
+      console.log("Template task if call");
+      if (frm.doc.custom_task_sequence_number === 1) {
+        frappe.call({
+          method:
+            "envision_pms.py.calculate_exp_start_and_end_dates.calculate_exp_start_and_exp_end_date",
+          args: {
+            // current_task: frm.doc.name,
+            project: frm.doc.project,
+            //  sequence_number: frm.doc.custom_task_sequence_number,
+            exp_start_date: frm.doc.exp_start_date,
+            company: frm.doc.company,
+            // exp_start_date: frm.doc.exp_start_date,
+          },
+          callback: function (r) {
+            if (!r.exc) {
+              console.log("date updated ");
+            }
+          },
+        });
+      } else {
+        console.log("Not in the first Template first Task");
+        frappe.msgprint("Go to the first Template task");
+      }
+    }
   }, // End of exp_start_date event
 }); // End Frappe.form.ui

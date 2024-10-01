@@ -118,21 +118,26 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    # "ToDo": "custom_app.overrides.CustomToDo"
+    "Project": "envision_pms.override.project.Project"
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    # "Project": {
+    #     "before_save": "envision_pms.py.project.naming_series",
+    # },
+    # "Issue": {
+    #     "before_save": "envision_pms.py.issue.issue_naming_series",
+    # },
+    # "Timesheet": {
+    #     "before_save": "envision_pms.py.timesheet.timesheet_naming_series",
+    # },
+}
 
 # Scheduled Tasks
 # ---------------
