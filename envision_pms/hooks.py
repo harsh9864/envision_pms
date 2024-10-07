@@ -128,11 +128,11 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
-    # "Project": {
-    #     "before_save": "envision_pms.py.project.naming_series",
-    # },
-    # "Issue": {
-    #     "before_save": "envision_pms.py.issue.issue_naming_series",
+    "Task": {
+        "before_save": "envision_pms.py.task_naming_series.generate_task_id",
+    },
+    # "Task": {
+    #     "after_insert": "envision_pms.py.task_naming_series.rename_task_id",
     # },
     # "Timesheet": {
     #     "before_save": "envision_pms.py.timesheet.timesheet_naming_series",
@@ -235,3 +235,14 @@ doc_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
+fixtures = [
+    # "Workspace",
+    # "Workflow",
+    # "Workflow Action",
+    # "Workflow State",
+    # "Custom DocPerm",
+    # "Role",
+    # "Role Profile",
+    {"dt": "Property Setter", "filters": [["doc_type", "in", ["Task"]]]},
+]

@@ -10,7 +10,7 @@ from erpnext import get_default_company
 from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
 
 
-#  function to update date if hiliday found 
+#  Function to update date if holiday found
 @frappe.whitelist()
 def update_if_holiday(date, company):
     holiday_list = get_holiday_list(company)
@@ -18,7 +18,8 @@ def update_if_holiday(date, company):
         date = add_days(date, 1)
     return date
 
-#   Function to get holiday list
+
+# Function to get holiday list
 @frappe.whitelist()
 def get_holiday_list(company=None):
     if not company:
@@ -32,6 +33,7 @@ def get_holiday_list(company=None):
             )
         )
     return holiday_list
+
 
 # Function to calculate exp start and end dates
 @frappe.whitelist()
@@ -51,15 +53,15 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
         project_task_list, key=lambda x: x["custom_task_sequence_number"]
     )
 
-    # Initialize the variable to track the end date of the previous task
+    # Track the end date of the previous task
     prev_task_end_date = update_if_holiday(exp_start_date, company)
 
     for task_data in sorted_task_list:
         task = frappe.get_doc("Task", task_data.name)
 
-        # Set the start date for the current task
         task.exp_start_date = prev_task_end_date
 
+        # Add    exp days in the exp start date
         task.exp_end_date = add_days(
             task.exp_start_date, task.custom_expected_time_in_days
         )
@@ -73,12 +75,12 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
         task.save()
         print("\n Exp Start Date : ", task.exp_start_date)
         print("\n Exp End Date : ", task.exp_end_date)
-    
+        task.reload()
 
     frappe.msgprint("Task start and end dates have been calculated successfully.")
 
 
-# Backup Code 
+# Backup Code
 
 # @frappe.whitelist()
 # def calculate_exp_start_and_exp_end_date(project, exp_start_date):

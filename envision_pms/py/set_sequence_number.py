@@ -119,57 +119,57 @@ def update_task_sequence(project_task_list, template_task_list):
         frappe.throw(f"An error occurred while updating task sequence: {str(e)}")
 
 
-@frappe.whitelist()
-def update_estimated_time_in_days(template_task_list, project_task_list):
-    try:
-        # Get per_day_hours
-        per_day_hours_dict = get_default_shift_hours()
+# @frappe.whitelist()
+# def update_estimated_time_in_days(template_task_list, project_task_list):
+#     try:
+#         # Get per_day_hours
+#         per_day_hours_dict = get_default_shift_hours()
 
-        # Check if per_day_hours_dict is valid, set per_day_hours to 8
-        if per_day_hours_dict and "per_day_hours" in per_day_hours_dict:
-            per_day_hours = per_day_hours_dict["per_day_hours"]
-        else:
-            per_day_hours = 8
+#         # Check if per_day_hours_dict is valid, set per_day_hours to 8
+#         if per_day_hours_dict and "per_day_hours" in per_day_hours_dict:
+#             per_day_hours = per_day_hours_dict["per_day_hours"]
+#         else:
+#             per_day_hours = 8
 
-        print("\n\n\n\n Per day hours: ", per_day_hours)
+#         print("\n\n\n\n Per day hours: ", per_day_hours)
 
-        # Iterate through the template task list
-        for template_task in template_task_list:
-            template_idx = template_task["idx"]
-            template_task_id = template_task["task"]
+#         # Iterate through the template task list
+#         for template_task in template_task_list:
+#             template_idx = template_task["idx"]
+#             template_task_id = template_task["task"]
 
-            # Fetch days
-            custom_expected_time_in_days = frappe.get_value(
-                "Task", template_task_id, "custom_expected_time_in_days"
-            )
+#             # Fetch days
+#             custom_expected_time_in_days = frappe.get_value(
+#                 "Task", template_task_id, "custom_expected_time_in_days"
+#             )
 
-            print("Template task days value: ", custom_expected_time_in_days)
+#             print("Template task days value: ", custom_expected_time_in_days)
 
-            # Find the corresponding project task with the matching custom_task_sequence_number (idx)
-            for project_task in project_task_list:
-                if project_task["custom_task_sequence_number"] == template_idx:
-                    # Get the project task document
-                    project_task_doc = frappe.get_doc("Task", project_task["name"])
+#             # Find the corresponding project task with the matching custom_task_sequence_number (idx)
+#             for project_task in project_task_list:
+#                 if project_task["custom_task_sequence_number"] == template_idx:
+#                     # Get the project task document
+#                     project_task_doc = frappe.get_doc("Task", project_task["name"])
 
-                    # Update the project task's custom_expected_time_in_days
-                    project_task_doc.custom_expected_time_in_days = (
-                        custom_expected_time_in_days
-                    )
+#                     # Update the project task's custom_expected_time_in_days
+#                     project_task_doc.custom_expected_time_in_days = (
+#                         custom_expected_time_in_days
+#                     )
 
-                    # Calculate and update the expected time in hours
-                    project_task_doc.expected_time = (
-                        per_day_hours * custom_expected_time_in_days
-                    )
+#                     # Calculate and update the expected time in hours
+#                     project_task_doc.expected_time = (
+#                         per_day_hours * custom_expected_time_in_days
+#                     )
 
-                    # Save the document after updating both fields
-                    project_task_doc.save()
+#                     # Save the document after updating both fields
+#                     project_task_doc.save()
 
-                    print(
-                        f"Updated project task {project_task['name']} with custom_expected_time_in_days: {custom_expected_time_in_days} and expected_time: {project_task_doc.expected_time}"
-                    )
+#                     print(
+#                         f"Updated project task {project_task['name']} with custom_expected_time_in_days: {custom_expected_time_in_days} and expected_time: {project_task_doc.expected_time}"
+#                     )
 
-        # Commit the database changes
-        frappe.db.commit()
+#         # Commit the database changes
+#         frappe.db.commit()
 
-    except Exception as e:
-        frappe.throw(f"An error occurred while updating task sequence: {str(e)}")
+#     except Exception as e:
+#         frappe.throw(f"An error occurred while updating task sequence: {str(e)}")
