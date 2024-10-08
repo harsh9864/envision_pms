@@ -94,11 +94,11 @@ def generate_task_id(doc, event):
 
             # doc.insert()
 
-        else:
-            # Generate a parent task ID
+        # elif doc.is_group == 0 and doc.parent_task ==None :
+        #     # Generate a parent task ID
 
-            doc.name = generate_parent_task_id(parent_prefix)
-            print("  Else Parent Task Called :", doc.name)
+        #     doc.name = generate_parent_task_id(doc,parent_prefix)
+        #     print("  Else Parent Task Called :", doc.name)
             # frappe.db.commit()
             # doc.insert(ignore_permissions=True)
             # frappe.db.commit()
@@ -156,7 +156,7 @@ def generate_child_task_id(parent_task_id):
 
 
 # Create parent task id
-def generate_parent_task_id(parent_prefix):
+def generate_parent_task_id(doc,parent_prefix):
 
     last_parent_id = frappe.db.sql(
         """
@@ -181,7 +181,6 @@ def generate_parent_task_id(parent_prefix):
     while frappe.db.exists("Task", new_task_id):
         next_parent_id += 1
         new_task_id = f"{parent_prefix}{next_parent_id:06d}"
-
     return new_task_id
 
 

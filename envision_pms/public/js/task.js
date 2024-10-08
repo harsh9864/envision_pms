@@ -52,73 +52,73 @@ frappe.ui.form.on("Task", {
     });
   },
 
-  onload_post_render: function (frm) {
-    if (frm.doc.custom_task_sequence_number === 0) {
-      if (frm.doc.template_task) {
-        frappe.call({
-          method:
-            "envision_pms.py.set_sequence_number.set_sequence_number_to_tasks",
-          args: {
-            current_task: frm.doc.name,
-            project: frm.doc.project,
-          },
-          callback: function (r) {
-            // cur_frm.reload_doc();
-            if (!r.exc) {
-              frm.reload_doc();
+  // onload_post_render: function (frm) {
+  //   if (frm.doc.custom_task_sequence_number === 0) {
+  //     if (frm.doc.template_task) {
+  //       frappe.call({
+  //         method:
+  //           "envision_pms.py.set_sequence_number.set_sequence_number_to_tasks",
+  //         args: {
+  //           current_task: frm.doc.name,
+  //           project: frm.doc.project,
+  //         },
+  //         callback: function (r) {
+  //           // cur_frm.reload_doc();
+  //           if (!r.exc) {
+  //             frm.reload_doc();
             
-            } // End of callback if condition
-          }, // End of callback function
-        }); // End frappe call
-      }
-    } // end if condition for sequence number !==0
-  },
+  //           } // End of callback if condition
+  //         }, // End of callback function
+  //       }); // End frappe call
+  //     }
+  //   } // end if condition for sequence number !==0
+  // },
 
-  //  Event when exp start date change   
-  exp_start_date: function (frm) {
-    // Check Task is templet task or not 
-    if (frm.doc.template_task) {
-      // Check template task sequence no
-      if (frm.doc.custom_task_sequence_number === 1) {
-        // confirmation message to auto calculate exp start and end dates
-        frappe.confirm(
-          "Are you want to planned expected start and end dates ?",
-          function () {
-            frappe.call({
-              method:
-                "envision_pms.py.calculate_exp_start_and_end_dates.calculate_exp_start_and_exp_end_date",
-              args: {
-                project: frm.doc.project,
-                //  sequence_number: frm.doc.custom_task_sequence_number,
-                exp_start_date: frm.doc.exp_start_date,
-                company: frm.doc.company,
-                // exp_start_date: frm.doc.exp_start_date,
-              },
-              callback: function (r) {
-                if (!r.exc) {
-                  console.log("date updated ");
-                  // Reload the current form 
-                  cur_frm.reload_doc();
+  // //  Event when exp start date change   
+  // exp_start_date: function (frm) {
+  //   // Check Task is templet task or not 
+  //   if (frm.doc.template_task) {
+  //     // Check template task sequence no
+  //     if (frm.doc.custom_task_sequence_number === 1) {
+  //       // confirmation message to auto calculate exp start and end dates
+  //       frappe.confirm(
+  //         "Are you want to planned expected start and end dates ?",
+  //         function () {
+  //           frappe.call({
+  //             method:
+  //               "envision_pms.py.calculate_exp_start_and_end_dates.calculate_exp_start_and_exp_end_date",
+  //             args: {
+  //               project: frm.doc.project,
+  //               //  sequence_number: frm.doc.custom_task_sequence_number,
+  //               exp_start_date: frm.doc.exp_start_date,
+  //               company: frm.doc.company,
+  //               // exp_start_date: frm.doc.exp_start_date,
+  //             },
+  //             callback: function (r) {
+  //               if (!r.exc) {
+  //                 console.log("date updated ");
+  //                 // Reload the current form 
+  //                 cur_frm.reload_doc();
 
-                } // End of callback if condition
-              }, // End of callback  function
-            }); // End of frappe call
-          }
-        ); // End of confirmation message and function
-      } // End of if condition ( template task sequence no)
+  //               } // End of callback if condition
+  //             }, // End of callback  function
+  //           }); // End of frappe call
+  //         }
+  //       ); // End of confirmation message and function
+  //     } // End of if condition ( template task sequence no)
 
-      // else if (
-      //   frm.doc.custom_task_sequence_number > 1 &&
-      //   (!frm.doc.exp_end_date ||
-      //     frm.doc.exp_end_date == "" ||
-      //     frm.doc.exp_end_date == undefined ||
-      //     frm.doc.exp_end_date == null)
-      // ) {
-      //   console.log("Not in the first Template Task");
-      //   frappe.msgprint(
-      //     "Action required: Please go to the first template task to proceed with setting expected start and end dates."
-      //   );
-      // }
-    }  // End of if condition is task is template task or not 
-  }, // End of exp_start_date event
+  //     // else if (
+  //     //   frm.doc.custom_task_sequence_number > 1 &&
+  //     //   (!frm.doc.exp_end_date ||
+  //     //     frm.doc.exp_end_date == "" ||
+  //     //     frm.doc.exp_end_date == undefined ||
+  //     //     frm.doc.exp_end_date == null)
+  //     // ) {
+  //     //   console.log("Not in the first Template Task");
+  //     //   frappe.msgprint(
+  //     //     "Action required: Please go to the first template task to proceed with setting expected start and end dates."
+  //     //   );
+  //     // }
+  //   }  // End of if condition is task is template task or not 
+  // }, // End of exp_start_date event
 }); // End Frappe.form.ui
