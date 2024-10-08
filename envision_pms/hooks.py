@@ -244,6 +244,12 @@ fixtures = [
     # "Custom DocPerm",
     # "Role",
     # "Role Profile",
-    {"dt": "Property Setter", "filters": [["doc_type", "in", ["Task"]]]},
+   {
+    "dt": "Property Setter",
+    "filters": [
+        ["doc_type", "in", ["Task"]],
+        ["property", "in", ["allow_rename"]]
+    ]
+},
     {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
 ]
