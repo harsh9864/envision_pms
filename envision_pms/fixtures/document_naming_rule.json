@@ -10,14 +10,14 @@
     "value": "1"
    }
   ],
-  "counter": 40,
+  "counter": 46,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Document Naming Rule",
   "document_type": "Task",
-  "modified": "2024-10-08 17:29:55.049315",
+  "modified": "2024-10-09 11:03:54.958464",
   "name": "unekfdpa00",
-  "prefix": "TS",
+  "prefix": "PTS",
   "prefix_digits": 6,
   "priority": 1
  },
@@ -40,12 +40,12 @@
     "value": "1"
    }
   ],
-  "counter": 83,
+  "counter": 94,
   "disabled": 0,
   "docstatus": 0,
   "doctype": "Document Naming Rule",
   "document_type": "Task",
-  "modified": "2024-10-08 17:29:55.168656",
+  "modified": "2024-10-09 11:04:56.614195",
   "name": "uoidtd73b0",
   "prefix": "TS",
   "prefix_digits": 6,
