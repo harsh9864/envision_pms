@@ -256,16 +256,17 @@ def rename_task_id(task_name, event=None):
         print("Save after ", new_task_id)
 
 
+@frappe.whitelist()
 def set_task_allow_rename(value):
-    # Check if property setter already exists for 'allow_rename' in Task
+    
     property_setter = frappe.db.get_value(
         "Property Setter", {"doc_type": "Task", "property": "allow_rename"}, "value"
-    )  # Fetch the current value directly
+    ) 
 
     # Convert value to string format ("1" for True, "0" for False)
     new_value = str(int(value))
 
-    # If Property Setter doesn't exist, create a new one
+    # If Property Setter doesn't exist, create a new Property setter
     if not property_setter:
         frappe.get_doc(
             {
@@ -277,7 +278,6 @@ def set_task_allow_rename(value):
                 "doctype_or_field": "DocType",
             }
         ).insert()
-        frappe.msgprint("Allow Rename property set for Task Doctype.")
 
     # If Property Setter exists, update the value only if it's different
     elif property_setter != new_value:
@@ -286,7 +286,3 @@ def set_task_allow_rename(value):
         )
         property_setter_doc.value = new_value
         property_setter_doc.save()
-        frappe.msgprint("Allow Rename property updated for Task Doctype.")
-
-    # frappe.db.commit()
-    # print("Commit after ", new_task_id)

@@ -82,7 +82,7 @@ frappe.ui.form.on("Task", {
       if (frm.doc.custom_task_sequence_number === 1) {
         // confirmation message to auto calculate exp start and end dates
         frappe.confirm(
-          "Are you want to planned expected start and end dates ?",
+          "Are you want to calculate expected start and end dates for other template tasks ?",
           function () {
             frappe.call({
               method:

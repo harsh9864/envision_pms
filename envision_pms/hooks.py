@@ -237,19 +237,28 @@ doc_events = {
 # }
 
 fixtures = [
-    # "Workspace",
+    # {"dt": "Workspace", "filters": [["module", "=", "Projects"]]},
+    # {"dt": "Report", "filters": [["module", "=", "Projects"]]},
+    # {
+    #     "dt": "Report",
+    #     "filters": [
+    #         ["module", "=", "Envision PMS"],
+    #         ["report_type", "=", "Custom Report"],
+    #     ],
+    # },
+    {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
+    {"dt": "Workspace", "filters": [["name", "=", "Projects"]]},
     # "Workflow",
     # "Workflow Action",
     # "Workflow State",
     # "Custom DocPerm",
     # "Role",
     # "Role Profile",
-#    {
-#     "dt": "Property Setter",
-#     "filters": [
-#         ["doc_type", "in", ["Task"]],
-#         ["property", "in", ["allow_rename"]]
-#     ]
-# },
-    {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
+    #    {
+    #     "dt": "Property Setter",
+    #     "filters": [
+    #         ["doc_type", "in", ["Task"]],
+    #         ["property", "in", ["allow_rename"]]
+    #     ]
+    # },
 ]

@@ -92,7 +92,7 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
         print("\n Exp End Date:", task.exp_end_date)
         task.reload()
 
-    frappe.msgprint("Task start and end dates have been calculated successfully.")
+    frappe.msgprint("Tasks expected start and end dates have been calculated successfully.")
 
 
 @frappe.whitelist()
