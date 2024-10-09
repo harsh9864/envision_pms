@@ -35,7 +35,6 @@ def get_holiday_list(company=None):
     return holiday_list
 
 
-# Function to calculate exp start and end dates
 @frappe.whitelist()
 def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
     # Convert exp_start_date to datetime if it's a string
@@ -58,27 +57,73 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
 
     for task_data in sorted_task_list:
         task = frappe.get_doc("Task", task_data.name)
-
         task.exp_start_date = prev_task_end_date
 
-        # Add    exp days in the exp start date
+        # if task.is_group == 1:
+        #     # If it's a group task, calculate total expected days for the group (including child tasks)
+        #     total_exp_days = totals_exp_days_for_parent_task(task)
+        #     task.exp_end_date = add_days(task.exp_start_date, total_exp_days)
+        #     task.exp_end_date = update_if_holiday(task.exp_end_date, company)
+
+        #     # Print debugging information
+        #     print("\n\n Parent Task End Date:", task.exp_end_date)
+
+        #     # The next task should start the day after this group task's end date
+        #     prev_task_end_date = add_days(task.exp_end_date, 1)
+        #     print("\n\n Next Task Start Date (After Group Task):", prev_task_end_date)
+
+        # else:
+            # If it's not a group task, calculate its end date based on its own exp_days
         task.exp_end_date = add_days(
-            task.exp_start_date, task.custom_expected_time_in_days
-        )
+                task.exp_start_date, task.custom_expected_time_in_days
+            )
         task.exp_end_date = update_if_holiday(task.exp_end_date, company)
 
-        # Update the end date for the next task to start the day after this task's end date
+            # The next task should start the day after this task's end date
         prev_task_end_date = add_days(task.exp_end_date, 1)
+        print("\n\n Next Task Start Date (After Non-Group Task):", prev_task_end_date)
+
+        # Make sure to adjust for holidays
         prev_task_end_date = update_if_holiday(prev_task_end_date, company)
 
         # Save the task with the updated start and end dates
         task.save()
-        print("\n Exp Start Date : ", task.exp_start_date)
-        print("\n Exp End Date : ", task.exp_end_date)
+        print("\n Exp Start Date:", task.exp_start_date)
+        print("\n Exp End Date:", task.exp_end_date)
         task.reload()
 
     frappe.msgprint("Task start and end dates have been calculated successfully.")
 
+
+@frappe.whitelist()
+def totals_exp_days_for_parent_task(task):
+    """
+    Calculates the total expected time in days for a group task, including all its child tasks.
+    """
+    # Initialize total expected days with the group's own expected time
+    total_exp_days_for_parent_task = task.custom_expected_time_in_days
+
+    # Get child tasks (if any) that depend on this parent task
+    child_task_details = frappe.get_all(
+        "Task Depends On", filters={"parent": task.name}, fields=["task"]
+    )
+    print("\nChild Task Details:", child_task_details)
+
+    # If child tasks exist, add their exp_days to the parent task's total exp_days
+    if child_task_details:
+        for child_task in child_task_details:
+            print("\nProcessing Child Task:", child_task["task"])
+
+            # Get the custom_expected_time_in_days of the child task
+            child_task_doc = frappe.get_doc("Task", child_task["task"])
+            child_exp_days = child_task_doc.custom_expected_time_in_days
+
+            # Add child's expected days to parent's total expected days
+            total_exp_days_for_parent_task += child_exp_days
+            print(f"\nAdded {child_exp_days} days for child task {child_task['task']}")
+
+    print("\nTotal Expected Days for Parent Task:", total_exp_days_for_parent_task)
+    return total_exp_days_for_parent_task
 
 # Backup Code
 
