@@ -85,12 +85,8 @@ def generate_task_id(doc, event):
         parent_prefix = "TS"
 
         if doc.parent_task:
-
-            print("  IF Child  Task Called \n\n")
-
             # Generate a child task ID
             doc.name = generate_child_task_id(doc.parent_task)
-            print("  IF Child Task Called", doc.name)
 
             # doc.insert()
 
@@ -231,29 +227,21 @@ def generate_parent_task_id(doc, parent_prefix):
 def rename_task_id(task_name, event=None):
     set_task_allow_rename(True)
     task_doc = frappe.get_doc("Task", task_name)
-    print("Rename Method called  ", task_doc.name)
 
     if not task_doc:
         frappe.throw(f"Task '{task_name}' does not exist.")
-    print("Before if ", task_doc.parent_task)
 
     if task_doc.parent_task:
         # Use the parent's ID for the new ID
         parent_task_id = task_doc.parent_task
         new_task_id = generate_child_task_id(parent_task_id)
-        print(
-            "new_task_id:",
-            new_task_id,
-        )
-
+       
         frappe.rename_doc(
             "Task",
             task_doc.name,
             new_task_id,
             merge=False,
         )
-
-        print("Save after ", new_task_id)
 
 
 @frappe.whitelist()

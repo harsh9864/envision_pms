@@ -96,7 +96,6 @@ frappe.ui.form.on("Task", {
               },
               callback: function (r) {
                 if (!r.exc) {
-                  console.log("date updated ");
                   // Reload the current form 
                   cur_frm.reload_doc();
 

@@ -3,10 +3,10 @@ import frappe
 
 @frappe.whitelist()
 def get_customer(sales_order):
-    print("\n\n sales_order: ", sales_order)
+    # print("\n\n sales_order: ", sales_order)
     sales_order_details = frappe.get_doc("Sales Order", sales_order, "customer")
 
-    print("\n\n Customer", sales_order_details.customer)
+    # print("\n\n Customer", sales_order_details.customer)
     return sales_order_details.customer
 
 

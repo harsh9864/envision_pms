@@ -22,11 +22,6 @@ def set_sequence_number_to_tasks(current_task, project):
         # Update the custom_task_sequence_number in the database
         update_task_sequence(sorted_project_task_list, template_task_list)
 
-        print(
-            "\nProject Task List with updated Sequence Numbers:",
-            project_task_list,
-        )
-
         # task.reload()
 
         sorted(project_task_list, key=lambda x: x["custom_task_sequence_number"])
@@ -83,7 +78,6 @@ def assign_custom_task_sequence(project_task_list, template_task_list):
 
     # Assign sequence numbers to project tasks based on matching subjects in template tasks.
     subject_to_idx_map = {task["subject"]: task["idx"] for task in template_task_list}
-    print("\n\ntemplate_task_list:", template_task_list)
 
     # Assign sequence numbers and return sorted project task list
     for task in project_task_list:
@@ -105,7 +99,7 @@ def update_task_sequence(project_task_list, template_task_list):
             # Set the custom_task_sequence_number using the value from project_task_list
             task.custom_task_sequence_number = task_data["custom_task_sequence_number"]
             task.save()
-            print("custom_task_sequence_number : ", task.custom_task_sequence_number)
+            
             # task.reload()
 
         # Commit all changes after the loop completes
