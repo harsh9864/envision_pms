@@ -28,7 +28,7 @@ def get_holiday_list(company=None):
     holiday_list = frappe.get_cached_value("Company", company, "default_holiday_list")
     if not holiday_list:
         frappe.throw(
-            _("Please set a default Holiday List for Company {0}").format(
+            ("Please set a default Holiday List for Company {0}").format(
                 frappe.bold(get_default_company())
             )
         )
