@@ -52,6 +52,14 @@ frappe.ui.form.on("Task", {
     });
   },
 
+  status:function(frm){
+    if (frm.doc.status === "Completed" && frm.doc.custom_is_format) {
+      if (frm.doc.custom_format_status_ !== "Completed"){
+        frappe.throw("Befor Complated the task format status should be Completed");
+      }
+    }
+  },
+
   onload_post_render: function (frm) {
     if (frm.doc.custom_task_sequence_number === 0) {
       if (frm.doc.template_task) {
