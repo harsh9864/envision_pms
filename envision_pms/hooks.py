@@ -246,7 +246,7 @@ fixtures = [
     #         ["report_type", "=", "Custom Report"],
     #     ],
     # },
-    {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
+    # {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
     {"dt": "Workspace", "filters": [["name", "=", "Projects"]]},
     # "Workflow",
     # "Workflow Action",
