@@ -28,7 +28,11 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Project": "public/js/project.js",
+    "Task": "public/js/task.js",
+    "Timesheet": "public/js/timesheet.js",
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -114,21 +118,26 @@ app_license = "mit"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    # "ToDo": "custom_app.overrides.CustomToDo"
+    "Project": "envision_pms.override.project.Project"
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Task": {
+        "before_save": "envision_pms.py.task_naming_series.generate_task_id",
+    },
+    # "Task": {
+    #     "after_insert": "envision_pms.py.task_naming_series.rename_task_id",
+    # },
+    # "Timesheet": {
+    #     "before_save": "envision_pms.py.timesheet.timesheet_naming_series",
+    # },
+}
 
 # Scheduled Tasks
 # ---------------
@@ -227,3 +236,29 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    # {"dt": "Workspace", "filters": [["module", "=", "Projects"]]},
+    # {"dt": "Report", "filters": [["module", "=", "Projects"]]},
+    # {
+    #     "dt": "Report",
+    #     "filters": [
+    #         ["module", "=", "Envision PMS"],
+    #         ["report_type", "=", "Custom Report"],
+    #     ],
+    # },
+    {"dt": "Document Naming Rule", "filters": [["document_type", "in", ["Task"]]]},
+    {"dt": "Workspace", "filters": [["name", "=", "Projects"]]},
+    # "Workflow",
+    # "Workflow Action",
+    # "Workflow State",
+    # "Custom DocPerm",
+    # "Role",
+    # "Role Profile",
+    #    {
+    #     "dt": "Property Setter",
+    #     "filters": [
+    #         ["doc_type", "in", ["Task"]],
+    #         ["property", "in", ["allow_rename"]]
+    #     ]
+    # },
+]
