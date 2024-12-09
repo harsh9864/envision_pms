@@ -17,7 +17,7 @@ from erpnext.controllers.queries import get_filters_cond
 from erpnext.controllers.website_list_for_contact import get_customers_suppliers
 from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
 
-from envision_pms.py.task_naming_series import rename_task_id
+# from envision_pms.py.task_naming_series import rename_task_id
 
 
 class Project(Document):
@@ -130,22 +130,12 @@ class Project(Document):
                 template_task_details = frappe.get_doc("Task", task.task)
                 tmp_task_details.append(template_task_details)
                 task = self.create_task_from_template(template_task_details)
-                # rename_task_id(task.name)
-                print(
-                        "\n\n After value set in the Task \n\n ", template_task_details, task.name
-                    )
+                
 
                 project_tasks.append(task)
 
             self.dependency_mapping(tmp_task_details, project_tasks)
 
-            # rename_task_id(task.name)
-
-            # print(
-            #         "\n\n After value set in the Task \n\n ", template_task_details, task.name
-            #     )
-
-            # print("\n\n After methd call  \n\n ", task.name)
 
     def create_task_from_template(self, task_details):
         return frappe.get_doc(
@@ -162,8 +152,12 @@ class Project(Document):
                 color=task_details.color,
                 template_task=task_details.name,
                 priority=task_details.priority,
-                custom_expected_time_in_days=task_details.custom_expected_time_in_days,
+                duration=task_details.duration,
+                # custom_expected_time_in_days=task_details.custom_expected_time_in_days,
                 expected_time=task_details.expected_time,
+                exp_start_date=self.calculate_start_date(task_details),
+                exp_end_date=self.calculate_end_date(task_details),
+                
             )
         ).insert()
 
@@ -208,10 +202,7 @@ class Project(Document):
                 if pt.template_task == template_task.parent_task:
                     project_task.parent_task = pt.name
                     project_task.save()
-                    print("\n\n\n", project_task.name)
-                    # print("\n\n\nMethod called ", rename_task_id(project_task.name))
-
-                    rename_task_id(project_task.name)
+                    
                     break
 
     def is_row_updated(self, row, existing_task_data, fields):
@@ -232,7 +223,7 @@ class Project(Document):
 
     def after_insert(self):
         self.copy_from_template()
-        print("method called after insert self",self)
+        # print("method called after insert self", self)
 
         if self.sales_order:
             frappe.db.set_value("Sales Order", self.sales_order, "project", self.name)

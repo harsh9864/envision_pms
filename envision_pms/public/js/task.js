@@ -10,7 +10,6 @@ function get_default_per_hour(callback) {
         if (!r.exc) {
           // Store the result in the global variable
           per_day_hour = r.message.per_day_hours;
-          
 
           // Execute callback once data is fetched
           if (callback) callback();
@@ -33,14 +32,29 @@ function convert_days_into_hours(days) {
     // Default 8 hr,if per_day_hour is not available
     return days * 8;
   }
-  return days * per_day_hour; 
+  return days * per_day_hour;
 }
 
 frappe.ui.form.on("Task", {
-  custom_expected_time_in_days: function (frm) {
+  // custom_expected_time_in_days: function (frm) {
+  //   get_default_per_hour(function () {
+  //     try {
+  //       let days = frm.doc.custom_expected_time_in_days || 0;
+
+  //       // Use per_day_hour in conversion
+  //       let hours = convert_days_into_hours(days);
+
+  //       frm.set_value("expected_time", Math.round(hours));
+  //     } catch (error) {
+  //       console.error(`Error updating ${day_field} to ${hour_field}:`, error);
+  //     }
+  //   });
+  // },
+
+  duration: function (frm) {
     get_default_per_hour(function () {
       try {
-        let days = frm.doc.custom_expected_time_in_days || 0;
+        let days = frm.doc.duration || 0;
 
         // Use per_day_hour in conversion
         let hours = convert_days_into_hours(days);
@@ -52,10 +66,12 @@ frappe.ui.form.on("Task", {
     });
   },
 
-  status:function(frm){
+  status: function (frm) {
     if (frm.doc.status === "Completed" && frm.doc.custom_is_format) {
-      if (frm.doc.custom_format_status_ !== "Completed"){
-        frappe.throw("Befor Complated the task format status should be Completed");
+      if (frm.doc.custom_format_status_ !== "Completed") {
+        frappe.throw(
+          "Befor Complated the task, format status should be Completed"
+        );
       }
     }
   },
@@ -74,7 +90,6 @@ frappe.ui.form.on("Task", {
   //           // cur_frm.reload_doc();
   //           if (!r.exc) {
   //             frm.reload_doc();
-            
   //           } // End of callback if condition
   //         }, // End of callback function
   //       }); // End frappe call
@@ -82,9 +97,9 @@ frappe.ui.form.on("Task", {
   //   } // end if condition for sequence number !==0
   // },
 
-  //  Event when exp start date change   
+  //  Event when exp start date change
   // exp_start_date: function (frm) {
-  //   // Check Task is templet task or not 
+  //   // Check Task is templet task or not
   //   if (frm.doc.template_task) {
   //     // Check template task sequence no
   //     if (frm.doc.custom_task_sequence_number === 1) {
@@ -104,9 +119,8 @@ frappe.ui.form.on("Task", {
   //             },
   //             callback: function (r) {
   //               if (!r.exc) {
-  //                 // Reload the current form 
+  //                 // Reload the current form
   //                 cur_frm.reload_doc();
-
   //               } // End of callback if condition
   //             }, // End of callback  function
   //           }); // End of frappe call
@@ -126,6 +140,6 @@ frappe.ui.form.on("Task", {
   //     //     "Action required: Please go to the first template task to proceed with setting expected start and end dates."
   //     //   );
   //     // }
-  //   }  // End of if condition is task is template task or not 
+  //   } // End of if condition is task is template task or not
   // }, // End of exp_start_date event
 }); // End Frappe.form.ui

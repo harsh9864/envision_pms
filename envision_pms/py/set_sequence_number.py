@@ -1,5 +1,5 @@
 import frappe
-from .get_data import get_default_shift_hours
+# from .get_data import get_default_shift_hours
 
 
 # set sequence number to every task of the project

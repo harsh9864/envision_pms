@@ -32,6 +32,7 @@ doctype_js = {
     "Project": "public/js/project.js",
     "Task": "public/js/task.js",
     "Timesheet": "public/js/timesheet.js",
+    "Project Template": "public/js/project_template.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -128,9 +129,9 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
-    "Task": {
-        "before_save": "envision_pms.py.task_naming_series.generate_task_id",
-    },
+    # "Task": {
+    #     "before_save": "envision_pms.py.task_naming_series.generate_task_id",
+    # },
     # "Task": {
     #     "after_insert": "envision_pms.py.task_naming_series.rename_task_id",
     # },
