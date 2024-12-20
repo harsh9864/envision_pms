@@ -14,7 +14,16 @@ frappe.ui.form.on("Timesheet Detail", {
       calculate_remaining_hrs(cdt, cdn, current_row.task);
     }
   },
+
+  custom_task_name: function(frm,cdt,cdn){
+    let current_row = locals[cdt][cdn];
+    // console.log("Task", current_row.task);
+    if (current_row.task) {
+      calculate_remaining_hrs(cdt, cdn, current_row.task);
+    }
+  },
 });
+
 
 // Function to calculate remaining hours
 function calculate_remaining_hrs(cdt, cdn, task) {
