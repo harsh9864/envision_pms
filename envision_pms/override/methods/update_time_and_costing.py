@@ -2,7 +2,6 @@ import frappe
 
 def update_time_and_costing(self):
         
-        print("\n\n\n\n\n Function called from the inii file ")
 
         tl = frappe.db.sql(
 			"""select min(from_time) as start_date, max(to_time) as end_date,
