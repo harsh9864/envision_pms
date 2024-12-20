@@ -1,4 +1,4 @@
-# __version__ = "0.0.1"
+__version__ = "0.0.1"
 
 from erpnext.projects.doctype.task.task import Task
 from envision_pms.override.methods.update_time_and_costing import (
