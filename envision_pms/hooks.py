@@ -75,6 +75,7 @@ doctype_js = {
 # before_install = "envision_pms.install.before_install"
 # after_install = "envision_pms.install.after_install"
 
+
 # Uninstallation
 # ------------
 
