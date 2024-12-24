@@ -27,7 +27,7 @@ frappe.ui.form.on("Project Template Task", {
                 if (!existing_task) {
                   // Find the index of the current row
                   const current_row_idx = current_row.idx;
-                  console.log("current_row_idx,", current_row_idx);
+                  // console.log("current_row_idx,", current_row_idx);
 
                   // Add the new row just after the current row
                   let new_row = frm.add_child(

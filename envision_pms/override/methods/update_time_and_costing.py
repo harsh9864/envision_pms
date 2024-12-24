@@ -14,6 +14,8 @@ def update_time_and_costing(self):
             self.status = "Working"
         self.total_costing_amount = tl.total_costing_amount
         self.total_billing_amount = tl.total_billing_amount
+        self.actual_time = tl.time
+        self.act_start_date = tl.start_date
 
         # Fetch timesheet details where 'completed' is checked and docstatus=1
         completed_timesheet_details = frappe.db.sql(
@@ -32,8 +34,7 @@ def update_time_and_costing(self):
         # Update only if there are completed entries
         if completed_timesheet_details and completed_timesheet_details.completed_count > 0:
 
-            self.actual_time = tl.time
-            self.act_start_date = tl.start_date
+            
             self.act_end_date = tl.end_date
 
             # Set the completion date to the act_end_date
