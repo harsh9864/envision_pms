@@ -211,7 +211,7 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
             task.exp_end_date = update_if_holiday(task.exp_end_date, company)
 
             # Print debugging information
-            print("\n\nParent Task End Date:", task.exp_end_date)
+            # print("\n\nParent Task End Date:", task.exp_end_date)
         else:
             # Non-group task: Calculate its end date based on custom expected time
             task.exp_end_date = add_days(
@@ -219,7 +219,7 @@ def calculate_exp_start_and_exp_end_date(project, exp_start_date, company):
             )
             task.exp_end_date = update_if_holiday(task.exp_end_date, company)
 
-            print("\n\nTask End Date (Non-Group Task):", task.exp_end_date)
+            # print("\n\nTask End Date (Non-Group Task):", task.exp_end_date)
 
         # Save the task with the updated dates
         task.save(ignore_permissions=True)

@@ -50,12 +50,12 @@ def get_dependent_tasks(task_name):
 
     # Initialize the queue with the starting task
     tasks_to_process = [task_name]
-    print("\n\ntasks_to_process: ", tasks_to_process)
+    # print("\n\ntasks_to_process: ", tasks_to_process)
 
     while tasks_to_process:
         # Process the first task in the queue
         current_task = tasks_to_process.pop(0)
-        print("\n\current_task: ", current_task)
+        # print("\n\current_task: ", current_task)
 
         # Fetch dependencies for the current task
         dependencies = frappe.get_all(
