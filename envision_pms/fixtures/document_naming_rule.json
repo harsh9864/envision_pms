@@ -1,0 +1,54 @@
+[
+ {
+  "conditions": [
+   {
+    "condition": "!=",
+    "field": "parent_task",
+    "parent": "08ev4gvojm",
+    "parentfield": "conditions",
+    "parenttype": "Document Naming Rule",
+    "value": "None"
+   },
+   {
+    "condition": "!=",
+    "field": "is_group",
+    "parent": "08ev4gvojm",
+    "parentfield": "conditions",
+    "parenttype": "Document Naming Rule",
+    "value": "1"
+   }
+  ],
+  "counter": 1,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Document Naming Rule",
+  "document_type": "Task",
+  "modified": "2025-02-17 11:02:11.214682",
+  "name": "08ev4gvojm",
+  "prefix": "TS",
+  "prefix_digits": 6,
+  "priority": 1
+ },
+ {
+  "conditions": [
+   {
+    "condition": "=",
+    "field": "is_group",
+    "parent": "dfes1v5g3b",
+    "parentfield": "conditions",
+    "parenttype": "Document Naming Rule",
+    "value": "1"
+   }
+  ],
+  "counter": 0,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Document Naming Rule",
+  "document_type": "Task",
+  "modified": "2025-02-17 10:59:28.519967",
+  "name": "dfes1v5g3b",
+  "prefix": "PTS",
+  "prefix_digits": 6,
+  "priority": 1
+ }
+]
