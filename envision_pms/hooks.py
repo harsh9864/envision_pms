@@ -263,22 +263,22 @@ fixtures = [
     #         ["property", "in", ["allow_rename"]]
     #     ]
     # },
-    {
-        "dt": "Custom DocPerm",
-        "filters": [
-            [
-                "parent",
-                "in",
-                [
-                    "Project",
-                    "Task",
-                    "Timesheet",
-                    "Project Template",
-                    "Project Type",
-                    "Project Sub Type",
-                    "Project Sub Type 2",
-                ],
-            ]
-        ],
-    },
+    # {
+    #     "dt": "Custom DocPerm",
+    #     "filters": [
+    #         [
+    #             "parent",
+    #             "in",
+    #             [
+    #                 "Project",
+    #                 "Task",
+    #                 "Timesheet",
+    #                 "Project Template",
+    #                 "Project Type",
+    #                 "Project Sub Type",
+    #                 "Project Sub Type 2",
+    #             ],
+    #         ]
+    #     ],
+    # },
 ]
