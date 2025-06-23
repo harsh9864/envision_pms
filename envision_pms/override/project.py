@@ -283,8 +283,8 @@ class Project(Document):
                     )
                 self.percent_complete = flt(flt(pct_complete), 2)
 
-        # don't update status if it is cancelled
-        if self.status == "Cancelled":
+        # don't update status if it is cancelled or On Hold
+        if self.status == "Cancelled" or self.status == "On Hold":
             return
 
         self.status = "Completed" if self.percent_complete == 100 else "Open"
