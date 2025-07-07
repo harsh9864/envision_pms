@@ -17,6 +17,9 @@ from erpnext.controllers.queries import get_filters_cond
 from erpnext.controllers.website_list_for_contact import get_customers_suppliers
 from erpnext.setup.doctype.holiday_list.holiday_list import is_holiday
 
+from frappe.utils import get_link_to_form
+
+
 # from envision_pms.py.task_naming_series import rename_task_id
 
 
@@ -155,19 +158,31 @@ class Project(Document):
                 duration=task_details.duration,
                 # custom_expected_time_in_days=task_details.custom_expected_time_in_days,
                 expected_time=task_details.expected_time,
+               
                 exp_start_date=self.calculate_start_date(task_details),
                 exp_end_date=self.calculate_end_date(task_details),
+                 custom_task_sequence_number=task_details.custom_task_sequence_number,
+                custom_is_format= task_details.custom_is_format,
+                custom_format_status_= task_details.custom_format_status_,
+                custom_format_no= task_details.custom_format_no,
+                department=task_details.department,
                 
             )
         ).insert()
 
     def calculate_start_date(self, task_details):
         self.start_date = add_days(self.expected_start_date, task_details.start)
+        # ? Task start date is inclusive of start date, so we subtract 1 day
+        if task_details.start != 0:
+            self.start_date = add_days(self.start_date,-1 )
         self.start_date = self.update_if_holiday(self.start_date)
         return self.start_date
 
     def calculate_end_date(self, task_details):
         self.end_date = add_days(self.start_date, task_details.duration)
+        # ? Task duration is inclusive of start date, so we subtract 1 day
+        if task_details.duration != 0:
+            self.end_date = add_days(self.end_date, -1)
         return self.update_if_holiday(self.end_date)
 
     def update_if_holiday(self, date):
@@ -283,11 +298,63 @@ class Project(Document):
                     )
                 self.percent_complete = flt(flt(pct_complete), 2)
 
-        # don't update status if it is cancelled or On Hold
+        #? don't update status if it is cancelled or On Hold
         if self.status == "Cancelled" or self.status == "On Hold":
             return
-
+         
+         #? If status is Closed, validate before continuing
+        if self.status == "Closed":
+            validation_passed = self.validate_project_closure("update_percent_complete")
+            if  validation_passed:
+                  self.status == "Closed"
+                  return 
+        # ? if percent complete is 100, set status to Completed
         self.status = "Completed" if self.percent_complete == 100 else "Open"
+        
+    def validate_project_closure(doc, method):
+       
+        messages = []
+        print("\n\n\n\n\n\n\n\n Method called validate_project_closure")
+        # 1. Sales Order Check
+        sales_orders = frappe.get_all("Sales Order", filters={"project": doc.name, "status": ["not in", ["Completed", "Closed","Cancelled"]]}, fields=["name"])
+        if sales_orders:
+            links = ", ".join([get_link_to_form("Sales Order", so.name) for so in sales_orders])
+            messages.append(f"Sales Orders not completed: {links}")
+
+        # 2. Purchase Order Check
+        purchase_orders = frappe.get_all("Purchase Order", filters={"project": doc.name, "status": ["not in", ["Completed", "Closed","Cancelled"]]}, fields=["name"])
+        if purchase_orders:
+            links = ", ".join([get_link_to_form("Purchase Order", po.name) for po in purchase_orders])
+            messages.append(f"Purchase Orders not completed: {links}")
+
+        # 3. Sales Invoice Check    
+        sales_invoices = frappe.get_all("Sales Invoice", filters={"project": doc.name, "status": ["!=", "Paid"]}, fields=["name"])
+        if sales_invoices:
+            links = ", ".join([get_link_to_form("Sales Invoice", si.name) for si in sales_invoices])
+            messages.append(f"Sales Invoices not paid: {links}")
+
+        # 4. Purchase Invoice Check
+        purchase_invoices = frappe.get_all("Purchase Invoice", filters={"project": doc.name, "status": ["!=", "Paid"]}, fields=["name"])
+        if purchase_invoices:
+            links = ", ".join([get_link_to_form("Purchase Invoice", pi.name) for pi in purchase_invoices])
+            messages.append(f"Purchase Invoices not paid: {links}")
+
+        # 5. Open Stock Entries
+        stock_entries = frappe.get_all("Stock Entry", filters={"project": doc.name, "docstatus": 0}, fields=["name"])
+        if stock_entries:
+            links = ", ".join([get_link_to_form("Stock Entry", se.name) for se in stock_entries])
+            messages.append(f"Open Stock Entries exist: {links}")
+
+        # ?Raise error if any issues found
+        if messages:
+            frappe.msgprint(
+        "<b>Project has open items:</b><br><br>" + "<br>".join(messages),
+        
+        title="Project Closure Warnings"
+    )
+            return False
+        else:
+            return True
 
     def update_costing(self):
         from frappe.query_builder.functions import Max, Min, Sum
